@@ -79,6 +79,13 @@ Dự án này mô phỏng hoạt động của hệ thống đèn giao thông th
 
 ### 📊 **Sơ Đồ Tổng Quan**
 
+#### 🎯 **Kiến Trúc Cấp Cao (High-Level Architecture)**
+
+<div align="center">
+  <img src="images/system_architecture_highlevel.png" alt="System Architecture - High Level" width="600"/>
+  <p><em>Sơ đồ tổng quan hệ thống đèn giao thông với các module chính</em></p>
+</div>
+
 ```
 ┌─────────────────────────────────────────────────────────────────────────────────┐
 │                        🚦 TRAFFIC LIGHT CONTROL SYSTEM 🚦                      │
@@ -104,6 +111,13 @@ Dự án này mô phỏng hoạt động của hệ thống đèn giao thông th
 │                                                                                 │
 └─────────────────────────────────────────────────────────────────────────────────┘
 ```
+
+#### 🔗 **Sơ Đồ Kết Nối Module Chi Tiết**
+
+<div align="center">
+  <img src="images/module_interconnection_detailed.png" alt="Module Interconnection Details" width="700"/>
+  <p><em>Sơ đồ chi tiết kết nối giữa các module với tín hiệu I/O cụ thể</em></p>
+</div>
 
 ### � **Luồng Tín Hiệu Chính**
 
@@ -278,6 +292,12 @@ parameter RED_TIME    = 18;     // 18 giây cho đèn đỏ
   sudo apt-get install gtkwave
   ```
 
+**📁 Tạo thư mục images:**
+```bash
+# Tạo thư mục để chứa hình ảnh documentation
+mkdir -p images
+```
+
 </td>
 <td width="50%">
 
@@ -400,29 +420,58 @@ traffic-light-system/
 │   ├── *.out                         # Output files
 │   └── simulation_output.txt         # Text output logs
 │
-└── 📁 **ADDITIONAL FILES**
+├── 📁 **ADDITIONAL FILES**
     ├── fa.v, ha.v                    # Other Verilog components
     ├── *.cir, *.sp                   # SPICE circuit files
     └── CMakeLists.txt                # Build configuration
 ```
 
-### 📊 **Module Dependencies**
+### 📁 **Cấu Trúc Hình Ảnh và Tài Liệu**
 
-```mermaid
-graph TB
-    A[tb_traffic_light.v] --> B[traffic_light.v]
-    B --> C[traffic_light_fsm.v]
-    B --> D[timer.v]
-    B --> E[seg7_display<br/>internal module]
-    
-    F[tb_timer.v] --> D
-    G[traffic_light_fsm_tb.v] --> C
-    
-    style A fill:#e1f5fe
-    style B fill:#fff3e0
-    style C fill:#f3e5f5
-    style D fill:#e8f5e8
-    style E fill:#fff8e1
+```
+traffic-light-system/
+├── 📁 **images/**                     # ← Thư mục chứa hình ảnh minh họa
+│   ├── system_architecture_highlevel.png     # Sơ đồ kiến trúc tổng quan
+│   ├── module_interconnection_detailed.png   # Kết nối module chi tiết  
+│   ├── gtkwave_simulation_overview.png       # Tổng quan mô phỏng GTKWave
+│   ├── gtkwave_timing_detailed.png           # Timing analysis chi tiết
+│   ├── gtkwave_state_transitions.png         # State transition closeup
+│   └── gtkwave_recommended_layout.png        # Layout tối ưu GTKWave
+│
+├── 📄 README.md                      # ← File hướng dẫn này (comprehensive)
+├── 📋 NGUYEN_LY_HOAT_DONG.md          # Tài liệu nguyên lý hoạt động (Vietnamese)
+├── 📊 SYSTEM_SUMMARY.txt             # Tóm tắt hệ thống và signal analysis
+├── 📄 SYSTEM_DIAGRAM.md              # Sơ đồ khối hệ thống
+│
+├── 🔧 **CORE MODULES**
+│   ├── traffic_light.v               # ← TOP MODULE (main controller)
+│   ├── traffic_light_fsm.v           # ← FSM MODULE (state machine)
+│   ├── timer.v                       # ← TIMER MODULE (countdown timer)
+│   └── [seg7_display submodule in traffic_light.v]
+│
+├── 🧪 **TESTBENCH FILES**
+│   ├── tb_traffic_light.v            # ← Main testbench (complete system)
+│   ├── tb_timer.v                    # Timer module testbench
+│   ├── traffic_light_fsm_tb.v        # FSM testbench
+│   └── tb_fsm_detailed.v             # Detailed FSM testing
+│
+├── 🚀 **AUTOMATION SCRIPTS**
+│   ├── run_traffic_light_sim.sh      # ← Full simulation script (recommended)
+│   ├── run_traffic_quick.sh          # Quick simulation script
+│   ├── format_simulation.sh          # Output formatting utilities
+│   └── *.sh                          # Other helper scripts
+│
+├── 📁 **GENERATED FILES** (after simulation)
+│   ├── traffic_light_sim             # Compiled executable
+│   ├── traffic_light.vcd             # Waveform data (GTKWave)
+│   ├── *.vvp                         # Verilog simulation files
+│   ├── *.out                         # Output files
+│   └── simulation_output.txt         # Text output logs
+│
+├── 📁 **ADDITIONAL FILES**
+    ├── fa.v, ha.v                    # Other Verilog components
+    ├── *.cir, *.sp                   # SPICE circuit files
+    └── CMakeLists.txt                # Build configuration
 ```
 
 ---
@@ -885,7 +934,60 @@ end
 
 </details>
 
-### ✅ **Kết Quả Mong Đợi Chi Tiết**
+### 📈 **Kết Quả Mô Phỏng Thực Tế**
+
+#### 🎯 **Simulation Results Overview**
+
+<div align="center">
+  <img src="images/gtkwave_simulation_overview.png" alt="GTKWave Simulation Overview" width="800"/>
+  <p><em>Tổng quan kết quả mô phỏng trong GTKWave - Hiển thị full cycle của hệ thống</em></p>
+</div>
+
+#### 🔍 **Chi Tiết Timing Analysis**
+
+<div align="center">
+  <img src="images/gtkwave_timing_detailed.png" alt="GTKWave Detailed Timing" width="800"/>
+  <p><em>Phân tích timing chi tiết - State transitions và timer behavior</em></p>
+</div>
+
+#### ⚡ **Critical State Transitions**
+
+<div align="center">
+  <img src="images/gtkwave_state_transitions.png" alt="GTKWave State Transitions" width="800"/>
+  <p><em>Zoom vào các điểm chuyển trạng thái quan trọng với timer_load signals</em></p>
+</div>
+
+### 📊 **Waveform Analysis Guide**
+
+<details>
+<summary><strong>🔍 Cách đọc waveform từ các hình ảnh trên</strong></summary>
+
+#### **📸 Hình 1: Simulation Overview**
+- **Timeframe**: Hiển thị toàn bộ chu kỳ hoạt động
+- **Key Signals**: 
+  - `clk` - Clock signal (10MHz)
+  - `current_state` - FSM state changes
+  - `timer` - Countdown values
+  - Light signals - Red/Yellow/Green activation
+- **Observation**: Chu kỳ hoàn chỉnh 36 giây được thể hiện rõ ràng
+
+#### **📸 Hình 2: Detailed Timing**
+- **Focus**: Critical timing points và state transitions
+- **Analysis**:
+  - Timer countdown behavior
+  - State change synchronization
+  - Display update timing
+  - Zero detection accuracy
+
+#### **📸 Hình 3: State Transitions**
+- **Zoom Level**: Detailed view of transition moments
+- **Critical Points**:
+  - `timer_load` pulse generation
+  - State change timing
+  - Light control synchronization
+  - Display value updates
+
+</details>
 
 <details>
 <summary><strong>📊 Timeline hoàn chỉnh một chu kỳ</strong></summary>
@@ -895,6 +997,7 @@ end
 Time=     150 | RED=1 YELLOW=0 GREEN=0 | Display=18 | State=RED
 Time=     250 | RED=1 YELLOW=0 GREEN=0 | Display=17 | State=RED
 Time=     350 | RED=1 YELLOW=0 GREEN=0 | Display=16 | State=RED
+Time=     450 | RED=1 YELLOW=0 GREEN=0 | Display=15 | State=RED
 ...
 Time=  1750150 | RED=1 YELLOW=0 GREEN=0 | Display=02 | State=RED
 Time=  1800050 | RED=1 YELLOW=0 GREEN=0 | Display=01 | State=RED
@@ -949,6 +1052,26 @@ gtkwave traffic_light.vcd &
 - **Zoom in**: `Ctrl + +`
 - **Zoom out**: `Ctrl + -`
 - **Find transition**: Click chuột phải → "Search"
+
+#### 📸 **Bước 5: Screenshots như trong project**
+
+<div align="center">
+  
+**🎯 Recommended GTKWave Layout:**
+
+<img src="images/gtkwave_recommended_layout.png" alt="GTKWave Recommended Layout" width="600"/>
+
+*Layout tối ưu với signal grouping và formatting chuẩn*
+
+</div>
+
+**💡 Pro Tips:**
+- Group related signals together (như trong hình)
+- Use different colors cho các nhóm signal khác nhau
+- Save workspace để reuse configuration
+- Use cursors để measure timing accurately
+
+</details>
 
 </details>
 
@@ -1119,6 +1242,69 @@ Result: Display shows "25" immediately
 
 - Đảm bảo file VCD được tạo ra sau khi chạy mô phỏng
 - Kiểm tra cài đặt của GTKWave và thử mở lại file VCD
+
+---
+
+### 📸 **Hướng Dẫn Tạo Screenshots**
+
+<details>
+<summary><strong>🎯 Cách tạo các hình ảnh minh họa như trong project</strong></summary>
+
+#### **🔧 Bước 1: Chuẩn bị hệ thống**
+```bash
+# Chạy mô phỏng để tạo file VCD
+./run_traffic_light_sim.sh
+
+# Mở GTKWave
+gtkwave traffic_light.vcd &
+```
+
+#### **📊 Bước 2: Tạo System Architecture Diagram**
+- Sử dụng drawing tools (Visio, Draw.io, hoặc Inkscape)
+- Follow template trong file có sẵn
+- Export as PNG với resolution 600-800px width
+
+#### **📈 Bước 3: GTKWave Screenshots**
+
+**🎯 Overview Screenshot:**
+1. Add all major signals: clk, rst_n, current_state, timer, lights
+2. Zoom to fit 1-2 complete cycles
+3. Format signals appropriately (Binary/Decimal)
+4. Take screenshot: `File → Print → Save as Image`
+
+**🔍 Detailed Timing Screenshot:**
+1. Zoom vào critical transition points
+2. Add more detailed signals (timer_load, zero, etc.)
+3. Use cursors để highlight timing relationships
+4. Capture với measurement annotations
+
+**⚡ State Transition Screenshot:**
+1. Maximum zoom vào 1 state transition
+2. Show exact timing của timer_zero, state_change, timer_load
+3. Highlight critical signals
+4. Add timing measurements
+
+#### **📁 Bước 4: Organize Files**
+```bash
+# Tạo structure như trong project
+mkdir -p images
+mv *.png images/
+
+# Rename files theo convention
+mv screenshot1.png images/system_architecture_highlevel.png
+mv gtkwave1.png images/gtkwave_simulation_overview.png
+mv gtkwave2.png images/gtkwave_timing_detailed.png
+mv gtkwave3.png images/gtkwave_state_transitions.png
+```
+
+#### **✅ Quality Guidelines:**
+- **Resolution**: Minimum 600px width cho readability
+- **Format**: PNG preferred (better for technical diagrams)
+- **Labels**: Ensure all signal names are visible
+- **Contrast**: Good contrast để dễ đọc khi in B&W
+- **Consistency**: Same zoom levels và formatting across similar images
+
+</details>
 
 ---
 
